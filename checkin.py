@@ -104,7 +104,6 @@ def checkin(cookie):
 
     except Exception as e:
         print(f"解析登录结果失败：{e}")
-
         return None, None, None, None
 
     return mess, time, mail, balance  # Return the balance along with other information
