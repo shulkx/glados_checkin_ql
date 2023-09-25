@@ -123,7 +123,15 @@ def run_checkin():
         if not ret:
             continue
 
-        content = f"账号：{email}\n签到结果：{ret}\n剩余天数：{remain}\n最新余额：{balance}\n"  # Print the balance
+        # Format the balance message
+        balance = float(balance)
+        formatted_balance = (
+            f"{balance:.0f}" if balance.is_integer() else f"{balance:.2f}"
+        )
+        content = (
+            f"账号：{email}\n签到结果：{ret}\n剩余天数：{remain}\n最新余额：{formatted_balance} points\n"
+        )
+
         print(content)
         contents.append(content)
 
