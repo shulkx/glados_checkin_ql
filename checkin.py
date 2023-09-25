@@ -93,11 +93,21 @@ def checkin(cookie):
         mess = checkin.json()["message"]
         mail = state.json()["data"]["email"]
         time = state.json()["data"]["leftDays"].split(".")[0]
+
+        # Sort the list based on the 'time' key in descending order to have the most recent item first
+        sorted_list = sorted(
+            checkin.json()["list"], key=lambda x: x["time"], reverse=True
+        )
+        balance = sorted_list[0][
+            "balance"
+        ]  # Extracting the latest balance from the sorted list
+
     except Exception as e:
         print(f"解析登录结果失败：{e}")
-        return None, None, None
 
-    return mess, time, mail
+        return None, None, None, None
+
+    return mess, time, mail, balance  # Return the balance along with other information
 
 
 # 执行签到任务
@@ -108,11 +118,13 @@ def run_checkin():
         return ""
 
     for cookie in cookies:
-        ret, remain, email = checkin(cookie)
+        ret, remain, email, balance = checkin(
+            cookie
+        )  # Receive the balance from the checkin function
         if not ret:
             continue
 
-        content = f"账号：{email}\n签到结果：{ret}\n剩余天数：{remain}\n"
+        content = f"账号：{email}\n签到结果：{ret}\n剩余天数：{remain}\n最新余额：{balance}\n"  # Print the balance
         print(content)
         contents.append(content)
 
